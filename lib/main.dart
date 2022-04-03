@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingmall/states/authan.dart';
 import 'package:shoppingmall/states/buyer_service.dart';
 import 'package:shoppingmall/states/create_account.dart';
@@ -16,9 +17,30 @@ final Map<String, WidgetBuilder> map = {
 
 String? initleRoute;
 
-void main() {
-  initleRoute = MyConstant.routeAuthen;
-  runApp(MyApp());
+Future<Null> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? type = preferences.getString('type');
+  if (type?.isEmpty ?? true) {
+    initleRoute = MyConstant.routeAuthen;
+    runApp(MyApp());
+  } else {
+    switch (type) {
+      case 'buyer':
+        initleRoute = MyConstant.routeBuyerService;
+        runApp(MyApp());
+        break;
+      case 'saller':
+        initleRoute = MyConstant.routeSalerService;
+        runApp(MyApp());
+        break;
+      case 'rider':
+        initleRoute = MyConstant.routeRiderService;
+        runApp(MyApp());
+        break;
+      default:
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
