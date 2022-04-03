@@ -20,7 +20,9 @@ String? initleRoute;
 Future<Null> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences preferences = await SharedPreferences.getInstance();
+
   String? type = preferences.getString('type');
+    print('type: $type EP 28');
   if (type?.isEmpty ?? true) {
     initleRoute = MyConstant.routeAuthen;
     runApp(MyApp());
