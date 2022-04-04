@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoppingmall/states/add_product.dart';
 import 'package:shoppingmall/states/authan.dart';
 import 'package:shoppingmall/states/buyer_service.dart';
 import 'package:shoppingmall/states/create_account.dart';
@@ -13,6 +14,7 @@ final Map<String, WidgetBuilder> map = {
   '/buyerSrevice': (BuildContext context) => BuyerService(),
   '/salerService': (BuildContext context) => SalerService(),
   '/riderService': (BuildContext context) => RiderService(),
+  '/addProduct': (BuildContext context) => AddProduct(),
 };
 
 String? initleRoute;
@@ -22,7 +24,7 @@ Future<Null> main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
   String? type = preferences.getString('type');
-    print('type: $type EP 28');
+  print('type: $type EP 35.2');
   if (type?.isEmpty ?? true) {
     initleRoute = MyConstant.routeAuthen;
     runApp(MyApp());
@@ -50,11 +52,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MaterialColor materialColor =
+        MaterialColor(0xff575900, MyConstant.mapMatrtialColor);
     return MaterialApp(
       title: MyConstant.appName,
       routes: map,
       initialRoute: initleRoute,
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: materialColor),
     );
   }
 }

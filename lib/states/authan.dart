@@ -163,6 +163,9 @@ class _AuthanState extends State<Authan> {
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyConstant.light),
                   borderRadius: BorderRadius.circular(20)),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
+                  borderRadius: BorderRadius.circular(20)),
             ),
           ),
         ),
@@ -212,6 +215,9 @@ class _AuthanState extends State<Authan> {
                   borderRadius: BorderRadius.circular(20)),
               focusedBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: MyConstant.light),
+                  borderRadius: BorderRadius.circular(20)),
+              errorBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red),
                   borderRadius: BorderRadius.circular(20)),
             ),
           ),
