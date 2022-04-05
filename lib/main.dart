@@ -24,7 +24,7 @@ Future<Null> main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
   String? type = preferences.getString('type');
-  print('type: $type EP 35.2');
+  print('type: $type EP 42');
   if (type?.isEmpty ?? true) {
     initleRoute = MyConstant.routeAuthen;
     runApp(MyApp());

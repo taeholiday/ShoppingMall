@@ -1,8 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingmall/utility/my_constant.dart';
+import 'package:shoppingmall/utility/my_dialog.dart';
 import 'package:shoppingmall/widgets/show_image.dart';
 import 'package:shoppingmall/widgets/show_title.dart';
 
@@ -17,10 +21,13 @@ class _AddProductState extends State<AddProduct> {
   final formKey = GlobalKey<FormState>();
   List<File?> files = [];
   File? file;
+  TextEditingController nameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController detailController = TextEditingController();
+  List<String> paths = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     iniitalFile();
   }
@@ -35,6 +42,11 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () => processAddProduct(),
+              icon: Icon(Icons.cloud_upload))
+        ],
         title: Text('Add Product'),
       ),
       body: LayoutBuilder(
@@ -72,11 +84,75 @@ class _AddProductState extends State<AddProduct> {
         child: ElevatedButton(
             style: MyConstant().myButtonStyle(),
             onPressed: () {
-              if (formKey.currentState!.validate()) {}
+              processAddProduct();
             },
             child: Text(
               'Add Product',
             )));
+  }
+
+  void processAddProduct() async {
+    if (formKey.currentState!.validate()) {
+      bool checkFile = true;
+      for (var item in files) {
+        if (item == null) {
+          checkFile = false;
+        }
+      }
+      if (checkFile) {
+        print('## choose 4 image success');
+
+        MyDialog().showProgressDialog(context);
+        String apiSaveProduct =
+            '${MyConstant.domain}/shoppingmallAPI/saveProduct.php';
+        int loop = 0;
+        for (var item in files) {
+          int i = Random().nextInt(1000000);
+          String nameFile = 'product$i.jpg';
+          paths.add('/product/$nameFile');
+
+          Map<String, dynamic> map = {};
+          map['file'] =
+              await MultipartFile.fromFile(item!.path, filename: nameFile);
+
+          FormData data = FormData.fromMap(map);
+          await Dio().post(apiSaveProduct, data: data).then((value) async {
+            print('Uplond Success');
+            loop++;
+            if (loop >= files.length) {
+              SharedPreferences perference =
+                  await SharedPreferences.getInstance();
+              String idSeller = perference.getString('id')!;
+              String nameSeller = perference.getString('name')!;
+              String name = nameController.text;
+              String price = priceController.text;
+              String detail = detailController.text;
+              String images = paths.toString();
+
+              print('## isSeller = $idSeller, nameSeller = $nameSeller');
+              print('## name= $name, price = $price, detail = $detail');
+              print('## images ==> $images');
+
+              String path =
+                  '${MyConstant.domain}/shoppingmallAPI/insertProduct.php?isAdd=true&idSeller=$idSeller&nameSeller=$nameSeller&name=$name&price=$price&detail=$detail&images=$images';
+
+              await Dio().get(path).then((value) {
+                if (value.toString() == 'true') {
+                  Navigator.pop(context);
+                } else {
+                  MyDialog().nomalDialog(
+                      context, 'Add New Product False !!!', 'Please Try Again');
+                }
+              });
+              Navigator.pop(context);
+            }
+          });
+        }
+      } else {
+        MyDialog()
+            .nomalDialog(context, 'More Image', 'Please Choose More Image');
+      }
+    }
   }
 
   Future<Null> processSourceImagePicker(ImageSource source, int index) async {
@@ -89,7 +165,7 @@ class _AddProductState extends State<AddProduct> {
 
       setState(() {
         file = File(result!.path);
-        // files[index] = File(result.path);
+        files[index] = file;
       });
     } catch (e) {}
   }
@@ -151,29 +227,52 @@ class _AddProductState extends State<AddProduct> {
                 height: 48,
                 child: InkWell(
                   onTap: () => chooseSourceImageDialog(0),
-                  child: Image.asset(MyConstant.image5),
+                  child: files[0] == null
+                      ? Image.asset(MyConstant.image5)
+                      : Image.file(
+                          files[0]!,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
               Container(
                 width: 48,
                 height: 48,
                 child: InkWell(
-                    onTap: () => chooseSourceImageDialog(1),
-                    child: Image.asset(MyConstant.image5)),
+                  onTap: () => chooseSourceImageDialog(1),
+                  child: files[1] == null
+                      ? Image.asset(MyConstant.image5)
+                      : Image.file(
+                          files[1]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
               Container(
                 width: 48,
                 height: 48,
                 child: InkWell(
-                    onTap: () => chooseSourceImageDialog(2),
-                    child: Image.asset(MyConstant.image5)),
+                  onTap: () => chooseSourceImageDialog(2),
+                  child: files[2] == null
+                      ? Image.asset(MyConstant.image5)
+                      : Image.file(
+                          files[2]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
               Container(
                 width: 48,
                 height: 48,
                 child: InkWell(
-                    onTap: () => chooseSourceImageDialog(3),
-                    child: Image.asset(MyConstant.image5)),
+                  onTap: () => chooseSourceImageDialog(3),
+                  child: files[3] == null
+                      ? Image.asset(MyConstant.image5)
+                      : Image.file(
+                          files[3]!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
             ],
           ),
@@ -187,6 +286,7 @@ class _AddProductState extends State<AddProduct> {
       margin: EdgeInsets.only(top: 16),
       width: constraints.maxWidth * 0.75,
       child: TextFormField(
+        controller: nameController,
         validator: (value) {
           if (value!.isEmpty) {
             return 'Please Fill Name in Blank';
@@ -220,6 +320,7 @@ class _AddProductState extends State<AddProduct> {
       margin: EdgeInsets.only(top: 16),
       width: constraints.maxWidth * 0.75,
       child: TextFormField(
+        controller: priceController,
         validator: (value) {
           if (value!.isEmpty) {
             return 'Please Fill Price in Blank';
@@ -254,6 +355,7 @@ class _AddProductState extends State<AddProduct> {
       margin: EdgeInsets.only(top: 16),
       width: constraints.maxWidth * 0.75,
       child: TextFormField(
+        controller: detailController,
         validator: (value) {
           if (value!.isEmpty) {
             return 'Please Fill Detail in Blank';
