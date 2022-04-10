@@ -13,14 +13,13 @@ import 'package:shoppingmall/widgets/show_progress.dart';
 import 'package:shoppingmall/widgets/show_title.dart';
 
 class CreateAccount extends StatefulWidget {
-  CreateAccount({Key? key}) : super(key: key);
+  const CreateAccount({Key? key}) : super(key: key);
 
   @override
-  State<CreateAccount> createState() => _CreateAccountState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  bool statusRedEye = true;
   String? typeUser;
   String avatar = '';
   File? file;
@@ -47,20 +46,19 @@ class _CreateAccountState extends State<CreateAccount> {
       print('Service Location Open');
 
       locationPermission = await Geolocator.checkPermission();
-
       if (locationPermission == LocationPermission.denied) {
         locationPermission = await Geolocator.requestPermission();
         if (locationPermission == LocationPermission.deniedForever) {
           MyDialog().alertLocationService(
-              context, 'ไม่อนุญาติแชร์ Location', 'โปรดเเชร์ Location');
+              context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
         } else {
-          // Find LatLng
+          // Find LatLang
           findLatLng();
         }
       } else {
         if (locationPermission == LocationPermission.deniedForever) {
           MyDialog().alertLocationService(
-              context, 'ไม่อนุญาติแชร์ Location', 'โปรดเเชร์ Location');
+              context, 'ไม่อนุญาติแชร์ Location', 'โปรดแชร์ Location');
         } else {
           // Find LatLng
           findLatLng();
@@ -68,18 +66,18 @@ class _CreateAccountState extends State<CreateAccount> {
       }
     } else {
       print('Service Location Close');
-      MyDialog().alertLocationService(
-          context, 'Location Service ปิดอยู่ ?', 'กรุณาเปิด Location Service ');
+      MyDialog().alertLocationService(context, 'Location Service ปิดอยู่ ?',
+          'กรุณาเปิด Location Service ด้วยคะ');
     }
   }
 
   Future<Null> findLatLng() async {
-    print('findLatLng ==> Work');
+    print('findLatLan ==> Work');
     Position? position = await findPostion();
     setState(() {
       lat = position!.latitude;
       lng = position.longitude;
-      print('lat =$lat, lng =$lng');
+      print('lat = $lat, lng = $lng');
     });
   }
 
@@ -93,13 +91,202 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
+  Row buildName(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16),
+          width: size * 0.6,
+          child: TextFormField(
+            controller: nameController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณากรอก Name ด้วย คะ';
+              } else {
+                return null;
+              }
+            },
+            decoration: InputDecoration(
+              labelStyle: MyConstant().h3Style(),
+              labelText: 'Name :',
+              prefixIcon: Icon(
+                Icons.fingerprint,
+                color: MyConstant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.dark),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.light),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row builPhone(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16),
+          width: size * 0.6,
+          child: TextFormField(
+            controller: phoneController,
+            keyboardType: TextInputType.phone,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณากรอก Phone ด้วย คะ';
+              } else {}
+            },
+            decoration: InputDecoration(
+              labelStyle: MyConstant().h3Style(),
+              labelText: 'Phone :',
+              prefixIcon: Icon(
+                Icons.phone,
+                color: MyConstant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.dark),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.light),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildUser(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16),
+          width: size * 0.6,
+          child: TextFormField(
+            controller: userController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณากรอก User ด้วย คะ';
+              } else {}
+            },
+            decoration: InputDecoration(
+              labelStyle: MyConstant().h3Style(),
+              labelText: 'User :',
+              prefixIcon: Icon(
+                Icons.perm_identity,
+                color: MyConstant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.dark),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.light),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildPassword(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16),
+          width: size * 0.6,
+          child: TextFormField(
+            controller: passwordController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณากรอก Password ด้วย คะ';
+              } else {
+                return null;
+              }
+            },
+            decoration: InputDecoration(
+              labelStyle: MyConstant().h3Style(),
+              labelText: 'Password :',
+              prefixIcon: Icon(
+                Icons.lock_outline,
+                color: MyConstant.dark,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.dark),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.light),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row buildAddress(double size) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 16),
+          width: size * 0.6,
+          child: TextFormField(
+            controller: addressController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'กรุณากรอก Address ด้วย คะ';
+              } else {}
+            },
+            maxLines: 4,
+            decoration: InputDecoration(
+              hintText: 'Address :',
+              hintStyle: MyConstant().h3Style(),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
+                child: Icon(
+                  Icons.home,
+                  color: MyConstant.dark,
+                ),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.dark),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: MyConstant.light),
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         actions: [
-          buildCreateNewAccount(context),
+          buildCreateNewAccount(),
         ],
         title: Text('Create New Account'),
         backgroundColor: MyConstant.primary,
@@ -110,28 +297,25 @@ class _CreateAccountState extends State<CreateAccount> {
         child: Form(
           key: formKey,
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Column(
-                children: [
-                  buildTitle('ข้อมูลทั่วไป'),
-                  buildName(size),
-                  buildTitle('ชนิดของ User :'),
-                  buildRadioBuyer(size),
-                  buildRadioSaller(size),
-                  buildRadioRider(size),
-                  buildTitle('ข้อมูลพื้นฐาน'),
-                  buildAddress(size),
-                  buildPhone(size),
-                  buildUser(size),
-                  buildPassword(size),
-                  buildTitle('รูปภาพ'),
-                  buildSubTitle(),
-                  buildAvatar(size),
-                  buildTitle('เเสดงพิกัดที่คุณอยู่'),
-                  buildMap()
-                ],
-              ),
+            child: Column(
+              children: [
+                buildTitle('ข้อมูลทั่วไป :'),
+                buildName(size),
+                buildTitle('ชนิดของ User :'),
+                buildRadioBuyer(size),
+                buildRadioSeller(size),
+                buildRadioRider(size),
+                buildTitle('ข้อมูลพื้นฐาน'),
+                buildAddress(size),
+                builPhone(size),
+                buildUser(size),
+                buildPassword(size),
+                buildTitle('รูปภาพ'),
+                buildSubTitle(),
+                buildAvatar(size),
+                buildTitle('แสดงพิกัด ที่คุณอยู่'),
+                buildMap(),
+              ],
             ),
           ),
         ),
@@ -139,17 +323,17 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  IconButton buildCreateNewAccount(BuildContext context) {
+  IconButton buildCreateNewAccount() {
     return IconButton(
       onPressed: () {
         if (formKey.currentState!.validate()) {
           if (typeUser == null) {
             print('Non Choose Type User');
-            MyDialog().nomalDialog(
-                context, 'ยังไม่ได้เลือกชนิดของ User', 'กรุณาเลือกชนิด User');
+            MyDialog().nomalDialog(context, 'ยังไม่ได้เลือก ชนิดของ User',
+                'กรุณา Tap ที่ ชนิดของ User ที่ต้องการ');
           } else {
-            print('Process Insert to Daatabase');
-            uplondPictureAndInsertData();
+            print('Process Insert to Database');
+            uploadPictureAndInsertData();
           }
         }
       },
@@ -157,7 +341,7 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Future<Null> uplondPictureAndInsertData() async {
+  Future<Null> uploadPictureAndInsertData() async {
     String name = nameController.text;
     String address = addressController.text;
     String phone = phoneController.text;
@@ -168,12 +352,12 @@ class _CreateAccountState extends State<CreateAccount> {
     String path =
         '${MyConstant.domain}/shoppingmallAPI/getUserWhereUser.php?isAdd=true&user=$user';
     await Dio().get(path).then((value) async {
-      print('## value ===>>> $value');
+      print('## value ==>> $value');
       if (value.toString() == 'null') {
         print('## user OK');
 
         if (file == null) {
-          //No Avatar
+          // No Avatar
           processInsertMySQL(
             name: name,
             address: address,
@@ -182,9 +366,9 @@ class _CreateAccountState extends State<CreateAccount> {
             password: password,
           );
         } else {
-          //Have Avatar
-          print('## process Uplond Avatar');
-          String aipSaveAvatar =
+          // Have Avatar
+          print('### process Upload Avatar');
+          String apiSaveAvatar =
               '${MyConstant.domain}/shoppingmallAPI/saveAvatar.php';
           int i = Random().nextInt(100000);
           String nameAvatar = 'avatar$i.jpg';
@@ -192,8 +376,8 @@ class _CreateAccountState extends State<CreateAccount> {
           map['file'] =
               await MultipartFile.fromFile(file!.path, filename: nameAvatar);
           FormData data = FormData.fromMap(map);
-          await Dio().post(aipSaveAvatar, data: data).then((value) {
-            avatar = '/shoppingmall/avatar/$nameAvatar';
+          await Dio().post(apiSaveAvatar, data: data).then((value) {
+            avatar = '/shoppingmallAPI/avatar/$nameAvatar';
             processInsertMySQL(
               name: name,
               address: address,
@@ -215,7 +399,7 @@ class _CreateAccountState extends State<CreateAccount> {
       String? phone,
       String? user,
       String? password}) async {
-    print('## processInsertMySQL Work and avatar ===>> $avatar');
+    print('### processInsertMySQL Work and avatar ==>> $avatar');
     String apiInsertUser =
         '${MyConstant.domain}/shoppingmallAPI/insertUser.php?isAdd=true&name=$name&type=$typeUser&address=$address&phone=$phone&user=$user&password=$password&avatar=$avatar&lat=$lat&lng=$lng';
     await Dio().get(apiInsertUser).then((value) {
@@ -230,15 +414,16 @@ class _CreateAccountState extends State<CreateAccount> {
 
   Set<Marker> setMarker() => <Marker>[
         Marker(
-            markerId: MarkerId('id'),
-            position: LatLng(lat!, lng!),
-            infoWindow: InfoWindow(
-                title: 'คุณอยู่ที่นี่', snippet: 'lat = $lat, lng = $lng'))
+          markerId: MarkerId('id'),
+          position: LatLng(lat!, lng!),
+          infoWindow: InfoWindow(
+              title: 'คุณอยู่ที่นี่', snippet: 'Lat = $lat, lng = $lng'),
+        ),
       ].toSet();
 
   Widget buildMap() => Container(
         width: double.infinity,
-        height: 200.00,
+        height: 300,
         child: lat == null
             ? ShowProgress()
             : GoogleMap(
@@ -251,7 +436,7 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
       );
 
-  Future<void> chooseImage(ImageSource source) async {
+  Future<Null> chooseImage(ImageSource source) async {
     try {
       var result = await ImagePicker().getImage(
         source: source,
@@ -298,12 +483,13 @@ class _CreateAccountState extends State<CreateAccount> {
 
   ShowTile buildSubTitle() {
     return ShowTile(
-        title:
-            'เป็นรูปภาพ ที่เเสดงความเป็นตัวตนของ User (เเต่ถ้าไม่ สะดวกเเชร์ เราจะเเสดงภาพ default แทน)',
-        textStyle: MyConstant().h3Style());
+      title:
+          'เป็นรูปภาพ ที่แสดงความเป็นตัวตนของ User (แต่ถ้าไม่ สะดวกแชร์ เราจะแสดงภาพ default แทน)',
+      textStyle: MyConstant().h3Style(),
+    );
   }
 
-  Widget buildRadioBuyer(double size) {
+  Row buildRadioBuyer(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -314,7 +500,7 @@ class _CreateAccountState extends State<CreateAccount> {
             groupValue: typeUser,
             onChanged: (value) {
               setState(() {
-                typeUser = value.toString();
+                typeUser = value as String?;
               });
             },
             title: ShowTile(
@@ -327,18 +513,18 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Widget buildRadioSaller(double size) {
+  Row buildRadioSeller(double size) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           width: size * 0.6,
           child: RadioListTile(
-            value: 'saller',
+            value: 'seller',
             groupValue: typeUser,
             onChanged: (value) {
               setState(() {
-                typeUser = value.toString();
+                typeUser = value as String?;
               });
             },
             title: ShowTile(
@@ -362,7 +548,7 @@ class _CreateAccountState extends State<CreateAccount> {
             groupValue: typeUser,
             onChanged: (value) {
               setState(() {
-                typeUser = value.toString();
+                typeUser = value as String?;
               });
             },
             title: ShowTile(
@@ -375,230 +561,13 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 
-  Widget buildTitle(String title) => Row(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 16.0),
-            child: ShowTile(
-              title: title,
-              textStyle: MyConstant().h2Style(),
-            ),
-          ),
-        ],
-      );
-
-  Row buildName(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 16),
-          width: size * 0.6,
-          child: TextFormField(
-            controller: nameController,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'กรุณากรอก Name';
-              } else {
-                return null;
-              }
-            },
-            decoration: InputDecoration(
-              labelStyle: MyConstant().h3Style(),
-              labelText: 'Name :',
-              prefixIcon: Icon(
-                Icons.fingerprint,
-                color: MyConstant.dark,
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.dark),
-                  borderRadius: BorderRadius.circular(20)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.light),
-                  borderRadius: BorderRadius.circular(20)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.circular(20)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Row buildAddress(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 16),
-          width: size * 0.6,
-          child: TextFormField(
-            controller: addressController,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'กรุณากรอก Address';
-              } else {
-                return null;
-              }
-            },
-            maxLines: 4,
-            decoration: InputDecoration(
-              hintText: 'Address :',
-              hintStyle: MyConstant().h3Style(),
-              prefixIcon: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 60),
-                child: Icon(
-                  Icons.home_outlined,
-                  color: MyConstant.dark,
-                ),
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.dark),
-                  borderRadius: BorderRadius.circular(20)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.light),
-                  borderRadius: BorderRadius.circular(20)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.circular(20)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Row buildPhone(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 16),
-          width: size * 0.6,
-          child: TextFormField(
-            controller: phoneController,
-            keyboardType: TextInputType.phone,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'กรุณากรอกเบอร์โทร';
-              } else {
-                return null;
-              }
-            },
-            decoration: InputDecoration(
-              labelStyle: MyConstant().h3Style(),
-              labelText: 'Phon :',
-              prefixIcon: Icon(
-                Icons.phone_outlined,
-                color: MyConstant.dark,
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.dark),
-                  borderRadius: BorderRadius.circular(20)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.light),
-                  borderRadius: BorderRadius.circular(20)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.circular(20)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Row buildUser(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 16),
-          width: size * 0.6,
-          child: TextFormField(
-            controller: userController,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'กรุณากรอก User';
-              } else {
-                return null;
-              }
-            },
-            decoration: InputDecoration(
-              labelStyle: MyConstant().h3Style(),
-              labelText: 'User :',
-              prefixIcon: Icon(
-                Icons.perm_identity,
-                color: MyConstant.dark,
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.dark),
-                  borderRadius: BorderRadius.circular(20)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.light),
-                  borderRadius: BorderRadius.circular(20)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.circular(20)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Row buildPassword(double size) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          margin: EdgeInsets.only(top: 16),
-          width: size * 0.6,
-          child: TextFormField(
-            controller: passwordController,
-            keyboardType: TextInputType.visiblePassword,
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'กรุณากรอก Password';
-              } else {
-                return null;
-              }
-            },
-            obscureText: statusRedEye,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                onPressed: () {
-                  setState(() {
-                    statusRedEye = !statusRedEye;
-                  });
-                },
-                icon: Icon(
-                  statusRedEye
-                      ? Icons.remove_red_eye
-                      : Icons.remove_red_eye_outlined,
-                  color: MyConstant.dark,
-                ),
-              ),
-              labelStyle: MyConstant().h3Style(),
-              labelText: 'Password :',
-              prefixIcon: Icon(
-                Icons.lock_outline,
-                color: MyConstant.dark,
-              ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.dark),
-                  borderRadius: BorderRadius.circular(20)),
-              focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: MyConstant.light),
-                  borderRadius: BorderRadius.circular(20)),
-              errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red),
-                  borderRadius: BorderRadius.circular(20)),
-            ),
-          ),
-        ),
-      ],
+  Container buildTitle(String title) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 16),
+      child: ShowTile(
+        title: title,
+        textStyle: MyConstant().h2Style(),
+      ),
     );
   }
 }

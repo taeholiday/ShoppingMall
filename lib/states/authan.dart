@@ -116,7 +116,7 @@ class _AuthanState extends State<Authan> {
                 Navigator.pushNamedAndRemoveUntil(
                     context, MyConstant.routeBuyerService, (route) => false);
                 break;
-              case 'saller':
+              case 'seller':
                 Navigator.pushNamedAndRemoveUntil(
                     context, MyConstant.routeSalerService, (route) => false);
                 break;

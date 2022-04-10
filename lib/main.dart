@@ -4,6 +4,7 @@ import 'package:shoppingmall/states/add_product.dart';
 import 'package:shoppingmall/states/authan.dart';
 import 'package:shoppingmall/states/buyer_service.dart';
 import 'package:shoppingmall/states/create_account.dart';
+import 'package:shoppingmall/states/edit_profile_seller.dart';
 import 'package:shoppingmall/states/rider_service.dart';
 import 'package:shoppingmall/states/saler_service.dart';
 import 'package:shoppingmall/utility/my_constant.dart';
@@ -15,6 +16,7 @@ final Map<String, WidgetBuilder> map = {
   '/salerService': (BuildContext context) => SalerService(),
   '/riderService': (BuildContext context) => RiderService(),
   '/addProduct': (BuildContext context) => AddProduct(),
+  '/editProfileSaler': (BuildContext context) => EditProfileSeller(),
 };
 
 String? initleRoute;
@@ -24,7 +26,7 @@ Future<Null> main() async {
   SharedPreferences preferences = await SharedPreferences.getInstance();
 
   String? type = preferences.getString('type');
-  print('type: $type EP 48');
+  print('type: $type EP 65');
   if (type?.isEmpty ?? true) {
     initleRoute = MyConstant.routeAuthen;
     runApp(MyApp());
@@ -34,7 +36,7 @@ Future<Null> main() async {
         initleRoute = MyConstant.routeBuyerService;
         runApp(MyApp());
         break;
-      case 'saller':
+      case 'seller':
         initleRoute = MyConstant.routeSalerService;
         runApp(MyApp());
         break;

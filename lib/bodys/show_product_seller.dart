@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingmall/models/product_model.dart';
+import 'package:shoppingmall/states/edit_product.dart';
 import 'package:shoppingmall/utility/my_constant.dart';
 import 'package:shoppingmall/widgets/show_image.dart';
 import 'package:shoppingmall/widgets/show_progress.dart';
@@ -103,6 +104,7 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
     return ListView.builder(
       itemCount: productModels.length,
       itemBuilder: (BuildContext context, int index) {
+        print(productModels[index].images);
         return Card(
           child: Row(
             children: [
@@ -151,7 +153,16 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            print('## You Click Edit');
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditProduct(
+                                    productModel: productModels[index],
+                                  ),
+                                )).then((value) => londValueFromAPI());
+                          },
                           icon: Icon(
                             Icons.edit_outlined,
                             size: 36,
