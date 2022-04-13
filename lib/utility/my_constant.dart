@@ -4,7 +4,7 @@ class MyConstant {
 // Genernal
   static String appName = 'Shopping Mall';
   static String domain =
-      'https://5896-2001-fb1-5f-54c1-65c0-6716-e5ad-dc6b.ngrok.io';
+      'https://4cbb-2001-fb1-5f-741f-8143-8bbf-ec79-2b17.ngrok.io';
 
   // routes
   static String routeAuthen = '/authen';
@@ -14,6 +14,8 @@ class MyConstant {
   static String routeRiderService = '/riderService';
   static String routeAddProduct = '/addProduct';
   static String routeEditProfileSaler = '/editProfileSaler';
+  static String routeShowCart = '/showCart';
+  static String routeAddWallet = '/addWallet';
 
   //image
   static String image1 = 'images/image1.png';
@@ -55,6 +57,17 @@ class MyConstant {
   TextStyle h2whiteStyle() => TextStyle(
         fontSize: 18,
         color: Colors.white,
+        fontWeight: FontWeight.w700,
+      );
+  TextStyle h2RedStyle() => TextStyle(
+        fontSize: 18,
+        color: Colors.red.shade700,
+        fontWeight: FontWeight.w700,
+      );
+
+  TextStyle h2BlueStyle() => TextStyle(
+        fontSize: 18,
+        color: Colors.blue.shade800,
         fontWeight: FontWeight.w700,
       );
   TextStyle h3Style() => TextStyle(

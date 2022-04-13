@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -10,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppingmall/models/user_model.dart';
 import 'package:shoppingmall/utility/my_constant.dart';
+import 'package:shoppingmall/utility/my_dialog.dart';
 import 'package:shoppingmall/widgets/show_image.dart';
 import 'package:shoppingmall/widgets/show_progress.dart';
 import 'package:shoppingmall/widgets/show_title.dart';
@@ -118,7 +120,44 @@ class _EditProfileSellerState extends State<EditProfileSeller> {
 
   Future<Null> processEditProfileSeller() async {
     print('processEditProfileSeller Work');
-    if (formKey.currentState!.validate()) {}
+
+    MyDialog().showProgressDialog(context);
+    if (formKey.currentState!.validate()) {
+      if (file == null) {
+        print('## User Current Avatar');
+        editValueToMySQL(userModel!.avatar);
+      } else {
+        print('## User New Avatar');
+        String apiSaveAvatar =
+            '${MyConstant.domain}/shoppingmallAPI/saveAvatar.php';
+
+        List<String> nameAvatars = userModel!.avatar.split('/');
+        String nameFile = nameAvatars[nameAvatars.length - 1];
+        nameFile = 'edit${Random().nextInt(100)}$nameFile';
+
+        print('## User New Avatar nameFile ==>>> $nameFile');
+
+        Map<String, dynamic> map = {};
+        map['file'] =
+            await MultipartFile.fromFile(file!.path, filename: nameFile);
+        FormData formData = FormData.fromMap(map);
+        await Dio().post(apiSaveAvatar, data: formData).then((value) {
+          print('Upload Succes');
+          String pathAvatar = '/shoppingmallAPI/avatar/$nameFile';
+          editValueToMySQL(pathAvatar);
+        });
+      }
+    }
+  }
+
+  Future<Null> editValueToMySQL(String pathAvatar) async {
+    print('## pathAvatar ==> $pathAvatar');
+    String apiEditProfile =
+        '${MyConstant.domain}/shoppingmallAPI/editProfileSellerWhereId.php?isAdd=true&id=${userModel!.id}&name=${nameController.text}&address=${addressController.text}&phone=${phoneController.text}&avatar=$pathAvatar&lat=${latLng!.latitude}&lng=${latLng!.longitude}';
+    await Dio().get(apiEditProfile).then((value) {
+      Navigator.pop(context);
+      Navigator.pop(context);
+    });
   }
 
   ElevatedButton buildCuttonEditProfile() {

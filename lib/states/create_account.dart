@@ -355,7 +355,6 @@ class _CreateAccountState extends State<CreateAccount> {
       print('## value ==>> $value');
       if (value.toString() == 'null') {
         print('## user OK');
-
         if (file == null) {
           // No Avatar
           processInsertMySQL(
@@ -403,6 +402,8 @@ class _CreateAccountState extends State<CreateAccount> {
     String apiInsertUser =
         '${MyConstant.domain}/shoppingmallAPI/insertUser.php?isAdd=true&name=$name&type=$typeUser&address=$address&phone=$phone&user=$user&password=$password&avatar=$avatar&lat=$lat&lng=$lng';
     await Dio().get(apiInsertUser).then((value) {
+      print('value');
+      print(value.toString());
       if (value.toString() == 'true') {
         Navigator.pop(context);
       } else {

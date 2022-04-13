@@ -104,7 +104,6 @@ class _ShowProductSellerState extends State<ShowProductSeller> {
     return ListView.builder(
       itemCount: productModels.length,
       itemBuilder: (BuildContext context, int index) {
-        print(productModels[index].images);
         return Card(
           child: Row(
             children: [
